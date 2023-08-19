@@ -1,0 +1,410 @@
+echo cd /d D:\zero\box\ga207 > c1.bat
+CentOS访问ftp
+
+ftp://1@127.0.0.1:21/a/ai/appdata|pass64=MQ==
+ftp://1@127.0.0.1:21/a/ai/appdata|pass64=MQ==
+ftp://1@127.0.0.1:21/a/ai/appdata|pass64=MQ==
+
+ftp://1@127.0.0.1:21/a/
+ftp://1@127.0.0.1:21/a/
+ftp://1@192.168.0.124:21/a/
+ftp://1@192.168.0.124:21/a/
+
+ftp://1@192.168.0.201:21/
+centos打开ftp文件
+安装vsftpd服务并创建共享目录
+--首先切换到root用户.输入 su，sudo su,切换为 root 用户（密码默认为 vagrant）
+sudo su
+su root
+
+# 查看是否安装过
+rpm –qa | grep vsftpd
+
+1.1 查找vsftpd服务
+[root@localhost /]# rpm -aq vsftpd
+返回结果显示：
+vsftpd-3.0.2-21.el7.x86_64 #此处是查找vsftpd的返回结果
+vsftpd-3.0.2-29.el7_9.x86_64
+表示此服务期之前已经安装过vsftpd服务。
+
+1.2 删除查找到的vsftpd服务
+注：在卸载vsftpd之前，先停止vsftpd
+（卸载前先关闭 vsftpd: systemctl stop vsftpd）
+[root@localhost /]# /sbin/service vsftpd stop
+最后看一下自己的vsftp开启状态：
+systemctl status vsftpd.service
+卸载vsftpd：
+[root@localhost /]# rpm -e vsftpd-3.0.2-21.el7.x86_64
+rpm -e vsftpd-3.0.2-29.el7_9.x86_64
+返回结果显示：
+
+2、验证是否删除完成
+# 没安装过继续,可进入安装光盘挂载点的 Pachages 目录，输入下面的命 令来安装：
+rpm -ivh vsftpd-2.2.2-6.el6.i686.rpm
+# 有网情况可以直接使用yum简单安装
+yum install vsftpd -y
+Package vsftpd-3.0.2-29.el7_9.x86_64 already installed and latest version
+
+重启vsftpd服务并设置开机自启动
+systemctl restart vsftpd
+systemctl enable vsftpd
+最后看一下自己的vsftp开启状态：
+systemctl status vsftpd.service
+ftp://192.168.0.201/
+ftp://192.168.0.201/
+ftp localhost
+ftp 192.168.0.201
+--ok--user=ftpuser,passwd=1,useradd=admin,passwd=111111=1
+
+yum安装ftp命令：
+如果你用的是redhat，fedora，centos等系列linux发行版，那么敲入以下命令：
+sudo yum install vsftpd
+
+添加用户,设置密码
+useradd ftpuser
+passwd ftpuser   #passwd=1
+vagrant root
+
+1.确认centos是否开启过ftp服务，具体可以检查21端口有没有被占用， netstat -nltp |grep 21
+2.如果没有启用21端口，一般就没有安装ftp服务，安装ftp服务命令如下（参考：https://www.cnblogs.com/teamemory/p/8519606.html）
+   2.1 安装（vsftpd ），命令：sudo yum install vsftpd -y
+    2.2 启动ftp服务，命令：service vsftpd start
+    2.3 开机启动，命令：chkconfig vsftpd on
+    2.4 禁止匿名用户访问，命令：anonymous_enable=NO
+    anonymous_enable=YES
+    2.5 修改后重启ftp服务，命令：service vsftpd restart
+    2.6 如果需要访问所有ftp上目录，需要修改/etc/selinux/config 文件，将SELINUX=enforcing改为SELINUX=disabled 
+    2.7 如果是正式环境建议开启防火墙。只是学习，可以将防火墙关掉，并禁止开机启动，命令行如下：
+                systemctl stop firewalld.service       关闭防火墙
+                systemctl disable firewalld.service   禁止防火墙开机启动
+3.服务器配置完成后，在客户端安装ftp客户端，输入服务器用户名和密码即可。本人使用的是filezilla，效果还可以。
+
+Job for vsftpd.service failed because the control process exited with error code
+
+# 通过命令"sestatus"来查看seLinux是否开启,暂时禁用 SELinux,Current mode模式从target改为permissive,命令：sudo setenforce 0
+# sudo setenforce 0
+sestatus
+ #永久禁用SELinux,sudo vi /etc/sysconfig/selinux,将SELINUX=enforcing指令更改为SELINUX=disabled,命令重启系统时生效,sudo shutdown -r now
+ 关闭selinux
+需要修改/etc/selinux/config 文件，将SELINUX=enforcing改为SELINUX=disabled 
+
+只是学习，可以将防火墙关掉，并禁止开机启动
+                systemctl stop firewalld.service       关闭防火墙
+                systemctl disable firewalld.service   禁止防火墙开机启动
+# 永久禁用 selinux
+# 在关闭selinux之前，可以通过以下命令"sestatus"来查看seLinux是否开启。
+# sestatus
+# 需要修改/etc/selinux/config 文件，将SELINUX=enforcing改为SELINUX=disabled 
+# 保存并重启，之后看到的selinux就被关闭了。
+启动vsftp
+systemctl start vsftpd
+设置开机自启动
+systemctl enable vsftpd
+重启vsftpd服务并设置开机自启动
+systemctl restart vsftpd
+systemctl enable vsftpd
+最后看一下自己的vsftp开启状态：
+systemctl status vsftpd.service
+
+6、验证
+
+我们通过之前安装的ftp客户端命令来进行验证，首先登陆ftp服务端，命令如下：
+    $ lftp 192.168.0.201 -u ftp
+    lftp 192.168.0.201 -u ftp
+登陆成功后我们就可以看到 ftp 这个用户被限制在他自己的用户目录下，其他目录是不可以到达的，我们通过xftp工具用 ftp 这个账号登录FTP文件服务器，图示如下：
+
+bash: lsof: command not found
+bash: netstat: command not found
+# yum install lsof
+
+针对这个问题出现的原因，就是Linux缺少对应的包，使用命令安装即可： 
+yum install -y net-tools
+yum install net-tools -y
+
+查看21端口是否被占用，被占用的话就把占用21端口的进程杀死
+netstat -nltp |grep 21
+[root@VM-12-16-centos lighthouse]# lsof -i:21
+COMMAND     PID USER   FD   TYPE  DEVICE SIZE/OFF NODE NAME
+pure-ftpd 16235 root    4u  IPv4 1014289      0t0  TCP *:ftp (LISTEN)
+pure-ftpd 16235 root    5u  IPv6 1014290      0t0  TCP *:ftp (LISTEN) 
+
+修改vsftpd配置文件，禁用ipv6，打开iPv4
+[root@VM-12-16-centos lighthouse]# sudo vim /etc/vsftpd/vsftpd.conf
+
+重启vsftpd服务并设置开机自启动
+systemctl restart vsftpd
+systemctl enable vsftpd
+最后看一下自己的vsftp开启状态：
+systemctl status vsftpd.service
+ftp://192.168.0.201/
+ftp://192.168.0.201/
+
+yum install vsftpd -y
+mkdir -p /data				# 创建共享用户基本目录
+mkdir -p /data/all		     # 创建匿名用户访问目录
+
+修改配置文件，设置ftp共享方式
+cp /etc/vsftpd/vsftpd.conf{,.bak}
+egrep -v "^#|^$" /etc/vsftpd/vsftpd.conf.bak >/etc/vsftpd/vsftpd.conf
+
+cat >/etc/vsftpd/vsftpd.conf <<EOF
+anonymous_enable=YES
+local_enable=YES
+write_enable=YES
+local_umask=022
+dirmessage_enable=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+xferlog_std_format=YES
+listen=NO
+listen_ipv6=YES
+pam_service_name=vsftpd
+userlist_enable=YES
+tcp_wrappers=YES
+local_root=/data
+# 共享目录的基目录是/data
+chroot_local_user=YES
+anon_root=/data/all
+# 匿名用户访问的目录
+EOF
+
+删除用户 Creating mailbox file: File exists
+使用以下命令删除用户：sudo userdel username
+使用以下命令删除用户：sudo userdel admin
+rm -rf /home/用户名
+rm -rf /var/spool/mail/用户名
+sudo userdel admin
+rm -rf /home/admin
+rm -rf /var/spool/mail/admin
+
+--ok--user=ftpuser,passwd=1,useradd=admin,passwd=111111=1
+创建用户并设置密码,useradd=admin,passwd=111111=1
+# 创建管理员用户（不需要admin用户家目录）
+useradd admin -b /data
+echo 111111|passwd --stdin admin
+echo 1|passwd --stdin admin
+
+# 修改匿名用户的属主和属组
+chmod -R admin:admin /data/all
+
+# 创建普通用户（需要用户家目录）
+useradd vagrant -b /data
+useradd test -b /data
+
+# 本机测试,安装ftp客户端,ftp localhost command not found,yum install ftp -y
+yum install ftp -y
+
+ftp localhost
+ftp 192.168.0.201
+用户名： ftp 密码为空--创建用户并设置密码,useradd=admin,passwd=111111
+230 Login successful.
+
+500 OOPS: vsftpd: refusing to run with writable root inside chroot()  Login failed.
+意思是不能使用chroot限制可写的根目录,看了下vsftpd的更新日志:
+chmod a-w /home/centos
+chmod a-w /data
+chmod a-w /home/vagrant/data
+chmod a-w /home/hadoop/data
+mkdir /home/vagrant/data
+
+ftp localhost
+ls /data
+ls /data/all/
+cd /data
+/home/vagrant/data
+
+chmod 777 /etc/vsftpd/vsftpd.conf
+chmod 777 /etc/vsftpd/ftpusers
+chmod 777 /etc/vsftpd/user_list
+chmod 777 /data/admin/
+chmod 777 /data/all/
+chmod 777 /data/test/
+
+
+ftp localhost
+ftp 192.168.0.201
+vsftpd 500 OOPS: cannot change directory:/home/vagrant/data
+
+重启 vsftpd 服务并设置开机自启动
+systemctl restart vsftpd
+systemctl enable vsftpd
+systemctl status vsftpd.service
+
+一、centos 7连接FTP服务器以及常用操作
+安装ftp服务
+yum -y install ftp
+
+连接远程FTP服务器
+ftp 192.168.0.201
+随后输入用户名和密码
+ls
+get
+exit
+
+功能一（匿名）：
+1、首先我们在企业中ftp服务器，一般情况下都会有个共享服务器，允许员工下载一些公司的软件或者常用的软件包（方便，不用再取外网去下载，也省带宽）
+
+2、vsftp提供了匿名登录，默认anonymous_enable=YES的情况下，就启用了匿名访问，这种情况下你只能把需要给用户的文件，存放到/var/ftp/pub下（默认路径），如果想更改的话需要添加anon_root= /data/pub，后面的路径就是匿名登录后实际访问的目录。如果，总是那么多如果，匿名用户也需要上传的功能的话（一般情况下不会的）
+
+1、备份vsftpd.conf 为vsftpd.conf.bak
+[root@iZj6ccwnt0ocpvjw1kqkkiZ vsftpd]# cp vsftpd.conf vsftpd.conf.bak
+
+
+--ok--user=ftpuser,passwd=1,useradd=admin,passwd=111111=1
+添加用户,设置密码
+useradd ftpuser
+passwd ftpuser   #passwd=1
+useradd -g root -M -d /home/vsftpd -s /sbin/nologin ftpuser
+rm -rf /var/spool/mail/ftpuser
+useradd -g root -M -d /home/vsftpd -s /sbin/nologin ftpuser
+
+5、把 /home/vsftpd 的所有权给ftpuser.root
+[root@iZj6ccwnt0ocpvjw1kqkkiZ home]# chown -R ftpuser.root /home/vsftpd
+
+ftp://192.168.0.201/
+--ok--user=ftpuser,passwd=1,useradd=admin,passwd=111111
+
+
+注：解决window资源管理器无法访问的问题
+FTP时显示500 Illegal PORT command的解决
+FTP时显示500 Illegal PORT command的解决局域网用FTP命令访问外网的FTP SERVER，执行任何命令（如dir,ls,put,get）总是报下面的错误
+ftp:500 Illegal PORT command. 425
+ftp:Use PORT or PASV first
+或者是下面的错误
+ftp:500 Illegal PORT command.
+ftp: bind: Address already in use
+主要是由于Iptables防火墙不支持
+ip_nat_ftp
+ip_conntrack_ftp
+在linux的ftp服务器上执行下列命令即可解决
+modprobe ip_nat_ftp
+modprobe ip_conntrack_ftp
+原文地址：https://www.cnblogs.c
+
+
+1.1 查找vsftpd服务
+[root@localhost /]# rpm -aq vsftpd
+返回结果显示：
+vsftpd-3.0.2-21.el7.x86_64 #此处是查找vsftpd的返回结果
+vsftpd-3.0.2-29.el7_9.x86_64
+表示此服务期之前已经安装过vsftpd服务。
+
+1.2 删除查找到的vsftpd服务
+注：在卸载vsftpd之前，先停止vsftpd
+[root@localhost /]# /sbin/service vsftpd stop
+卸载vsftpd：
+[root@localhost /]# rpm -e vsftpd-3.0.2-21.el7.x86_64
+返回结果显示：
+warning: /etc/vsftpd/vsftpd.conf saved as /etc/vsftpd/vsftpd.conf.rpmsave #删除时将备份vsftp的用户列表文件
+1.3 输入验证命令，验证vsftpd服务是否已经删除
+[root@localhost /]# /sbin/service vsftpd stop
+Redirecting to /bin/systemctl stop vsftpd.service
+Failed to stop vsftpd.service: Unit vsftpd.service not loaded. #找不到vsftpd
+[root@localhost /]# /sbin/service vsftpd start
+Redirecting to /bin/systemctl start vsftpd.service
+Failed to start vsftpd.service: Unit not found. #找不到vsftpd
+如果输入以上两个命令都显示找不到vsftpd服务的话，那就证明已经卸载成功。
+
+2、安装vsftpd组件
+[root@localhost /]# yum -y install vsftpd
+2.1 启动ftp
+[root@localhost home]# systemctl start vsftpd.service
+2.2 放开21端口
+[root@localhost /]# firewall-cmd --zone=public --add-port=21/tcp --permanent
+[root@localhost /]# firewall-cmd --reload
+
+3、vsftpd服务的详细配置
+3.1 关闭匿名用户
+[root@localhost vsftpd]# vim /etc/vsftpd/vsftpd.conf
+在vsftpd.conf配置文件中修改以下三项：
+anonymous_enable=NO
+#anon_upload_enable=YES
+#anon_mkdir_write_enable=YES
+然后重启ftp服务：
+[root@localhost vsftpd]# systemctl restart vsftpd.service
+通过配置重启之后，匿名用户不可以登录了。
+
+3.2 建立ftp虚拟宿主账户
+新建一个不能登录系统用户. 只用来登录ftp服务 ,这里如果没设置用户目录。默认是在home下：
+[root@localhost vsftpd]# useradd ftpuser -s /sbin/nologin
+为ftpuser用户设置密码：
+[root@localhost /]# passwd ftpuser
+3.3 查看ftp的状态
+[root@localhost /]# getsebool -a|grep ftp
+显示结果：
+
+
+3.4 配置vsftpd.conf
+
+限制系统用户锁定在/home/ftpuser目录
+
+如果设置为
+
+chroot_local_user＝YES
+chroot_list_enable=YES(这行可以没有, 也可以有)
+chroot_list_file=/etc/vsftpd.chroot_list
+那么, 凡是加在文件vsftpd.chroot_list中的用户都是不受限止的用户
+
+即, 可以浏览其主目录的上级目录.
+
+所以, 如果不希望某用户能够浏览其主目录上级目录中的内容,可以如上设置, 然后在
+
+文件vsftpd.chroot_list中不添加该用户即可(此时, 在该文件中的用户都是可以浏览其主目录之外的目录的).
+
+或者, 设置如下
+chroot_local_user＝NO
+chroot_list_enable=YES(这行必须要有, 否则文件vsftpd.chroot_list不会起作用)
+chroot_list_file=/etc/vsftpd.chroot_list
+然后把所有不希望有这种浏览其主目录之上的各目录权限的用户添加到文件vsftpd.chroot_list(此时, 在该文件中的用户都是不可以浏览其主目录之外的目录的)
+
+中即可(一行一个用户名).
+
+[root@localhost vsftpd]# vim /etc/vsftpd/vsftpd.conf
+这里有两种方案，我采用第二种，配置如下：
+
+chroot_local_user＝NO
+chroot_list_enable=YES #(这行必须要有, 否则文件vsftpd.chroot_list不会起作用)
+chroot_list_file=/etc/vsftpd/chroot_list
+默认chroot_list是不存在的
+
+[root@localhost vsftpd]# vim /etc/vsftpd/chroot_list
+然后加入 ftpuser ，表示只有ftpuser不能访问上级目录，重启vsftpd。
+
+
+3.5 修改权限
+修改/home/ftpuser 的权限为不可写
+[root@localhost vsftpd]# chmod a-w /home/ftpuser/taotao
+这是因为我们在上面将/home/ftpuser/taotao文件的权限改为不可写了，那么我们在这个目录下创建一个images文件夹，用来上传文件。并将权限赋值给 ftpuser 用户
+
+[root@localhost taotao]# mkdir images
+[root@localhost images]# chown ftpuser images
+
+4、开启PASV（被动模式）
+
+在 /etc/vsftpd/vsftpd.conf 的最下面加入
+
+pasv_enable=YES
+pasv_min_port=30000
+pasv_max_port=30999
+并且在userlist_enable=YES文件后面添加
+
+userlist_deny=NO
+userlist_file=/etc/vsftpd/user_list
+开启防火墙：
+
+[root@localhost taotao]# firewall-cmd --zone=public --add-port=30000-30999/tcp --permanent 
+[root@localhost taotao]# firewall-cmd --reload
+这样就可以使用ftp服务器上传文件了。
+
+以上这篇CentOS 7 安装vsftpd 服务器的具体操作步骤就是小编分享给大家的全部内容了，希望能给大家一个参考，也希望大家多多支持亿速云。
+
+6、创建ftp目录
+6.1 创建ftp根目录vsftpd
+[root@centos7 ~]# cd /home
+[root@centos7 home]# mkdir vsftpd
+6.2 创建centos的ftpuser用户指定 /home/vsftpd目录，然后设置ftpuser用户的密码（输两次相同密码，本文设置的ftpuser用户的密码是123456）
+[root@centos7 home]# useradd -g root -M -d /home/vsftpd -s /sbin/nologin ftpuser
+[root@centos7 home]# passwd ftpuser
+6.3 把 /home/vsftpd根目录的所有权授予ftpuser.root
+[root@centos7 home]# chown -R ftpuser.root /home/vsftpd
+

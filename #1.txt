@@ -1,0 +1,126 @@
+
+#
+if [ -d "/data/all/file/go" ];then
+else
+echo "mkdir -p /data/all/file/go" 
+mkdir -p /data/all/file/go
+fi
+ #
+ # wget http://192.168.0.231/file/go/go1.20.7.linux-amd64.tar.gz
+#
+sleep 5 && echo "sleep 5"
+#
+echo "systemctl stop firewalld" 
+systemctl stop firewalld
+#
+echo "systemctl disable firewalld" 
+systemctl disable firewalld
+#
+# 创建共享用户基本目录
+echo "mkdir -p /data/"
+mkdir -p /data/
+#
+# 创建匿名用户访问目录
+echo "mkdir -p /data/all" 
+mkdir -p /data/all/
+echo "chmod a-w /data" 
+chmod a-w /data/
+echo "chmod 777 /data/all/" 
+chmod 777 /data/all/
+echo "chmod 777 /etc/sysconfig/network-scripts/ifcfg-eth0"
+chmod 777 "/etc/sysconfig/network-scripts/ifcfg-eth0"
+echo "chmod 777 /etc/ssh/sshd_config"
+chmod 777 "/etc/ssh/sshd_config"
+#
+rm -rf /data/all/ifcfg-eth0
+rm -rf /data/all/sshd_config
+cp /etc/sysconfig/network-scripts/ifcfg-eth0 /data/all/
+cp /etc/ssh/sshd_config /data/all/
+#
+echo "cd /data" 
+cd /data
+echo "cd /data/all" 
+cd /data/all
+echo "ls" 
+ls
+# Name=test
+# name=`sed '/^Name=/!d;s/.*=//' net.config`  
+# echo $name 
+echo "BOOTPROTO="
+BOOTPROTO=`sed '/^BOOTPROTO=/!d;s/.*=//' /data/all/ifcfg-eth0`  
+echo $BOOTPROTO 
+# 假设要将文件file.txt中所有的字符串"old"替换成"new"，可以使用以下命令：
+echo "sed /data/all/ifcfg-eth0" 
+sed -i 's/BOOTPROTO="dhcp"/BOOTPROTO="static"/g' /data/all/ifcfg-eth0
+#
+if [[ $BOOTPROTO == *dhcp* ]]; then
+echo "ok BOOTPROTO is dhcp" 
+echo "IPADDR=192.168.0.201" >> /data/all/ifcfg-eth0
+echo "NETMASK=255.255.255.0" >> /data/all/ifcfg-eth0
+echo "GATEWAY=192.168.0.1" >> /data/all/ifcfg-eth0
+echo "DNS1=192.168.0.1" >> /data/all/ifcfg-eth0
+fi
+#
+# 假设要将文件file.txt中所有的字符串"old"替换成"new"，可以使用以下命令：
+echo "sed /data/all/sshd_config" 
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /data/all/sshd_config
+#
+# 在Linux上，使用`chmod`命令可以授予或剥夺文件的权限。如果脚本没有执行权限，可以使用以下命令添加
+echo "chmod +x /data/all/hello.sh" 
+chmod +x /data/all/hello.sh
+# 显示文件全文
+echo "cat /data/all/hello.sh" 
+cat /data/all/hello.sh
+#
+echo "cat /data/all/ifcfg-eth0" 
+cat /data/all/ifcfg-eth0
+#
+echo "cat /data/all/sshd_config" 
+cat /data/all/sshd_config
+#
+# cp --force /path/to/source /path/to/destination
+#echo "cp --force /data/all/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0" 
+#cp --force /data/all/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0
+#
+#echo "cp --force /data/all/sshd_config /etc/ssh/sshd_config" 
+#cp --force /data/all/sshd_config /etc/ssh/sshd_config
+#
+# 修改成功之后需要重新启动ssh服务才生效,重启命令如下
+echo "service sshd restart"
+service sshd restart
+#
+# 重启网络服务，可以使用以下命令重启：
+echo "systemctl restart network"
+systemctl restart network
+# 检查 IP 地址是否已经生效，可以使用以下命令检查：
+echo "ip addr show eth0"
+ip addr show eth0
+sleep 1 && echo "sleep 1/3"
+sleep 1 && echo "sleep 2/3"
+sleep 1 && echo "sleep 3/3"
+# vagrant up
+# vagrant ssh
+# --安装--wget工具体积小但功能完善，它支持断点下载功能，同时支持FTP和HTTP下载方式，支持代理服务器和设置起来方便简单。
+# yum install -y wget
+# --输入以下命令，检查是否安装成功：
+# wget --version
+# wget -O - http://192.168.0.231/file/ipssh/data/all/etc/ipsshxsc/hello.sh | sh
+# wget -O - http://192.168.0.231/file/ipssh/data/all/etc/ipsshxsc/replace1.192.168.0.201.sh | sh
+# systemctl restart network
+# systemctl stop firewalld.service       关闭防火墙
+# systemctl disable firewalld.service   禁止防火墙开机启动
+# 永久禁用 SELinuxselinux
+# 在关闭selinux之前，可以通过以下命令"sestatus"来查看seLinux是否开启。
+# sestatus
+# 需要修改/etc/selinux/config 文件，将SELINUX=enforcing改为SELINUX=disabled 
+# 保存并重启，之后看到的selinux就被关闭了。
+# 修改ip参数
+# cd /data/all
+# bash hello.sh
+# bash ipssh.sh
+# sh hello.sh
+# sh ipssh.sh
+# sed '$a xxx' a.txt
+# r  No such file or directory
+# /data/all/code/go
+#

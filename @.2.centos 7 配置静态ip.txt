@@ -1,0 +1,43 @@
+centos 7 配置静态ip
+vagrant ssh
+三、CentOS 网络配置文件
+1.启动虚拟机，以 root 用户登录（必须是 root 用户，否则没权限修改配置文件）。
+--首先切换到root用户.输入 su，sudo su,切换为 root 用户（密码默认为 vagrant）
+sudo su
+su root
+--用以下一句，以管理员的权限修改以下配置文件中的2行参数：
+sudo vi /etc/ssh/sshd_config
+2.打开终端
+进入网络配置文件目录 /etc/sysconfig/network-scripts/，可以使用 cd /etc/sysconfig/network-scripts/ 命令进入目录。
+使用编辑器打开网卡配置文件，一般是 ifcfg-eth0 文件(如果有多个网卡，需要针对不同的网卡进行配置)，
+可以使用 vi ifcfg-eth0 命令打开编辑器。
+
+确认网卡的类型为静态 IP，即将 BOOTPROTO 设置为 static。
+配置 IP 地址、子网掩码和网关，例如：
+IPADDR=192.168.0.201      --192.168.1.100
+NETMASK=255.255.255.0
+GATEWAY=192.168.0.1   --192.168.1.1
+
+这里的 IP 地址 192.168.1.100 可以替换成您希望设置的静态 IP 地址，子网掩码和网关也需要根据您的网络环境进行相应的修改。
+
+配置 DNS 服务器(可选)，例如：
+DNS1=8.8.8.8
+DNS2=8.8.4.4
+
+IPADDR=192.168.0.201
+NETMASK=255.255.255.0
+GATEWAY=192.168.0.1
+DNS1=192.168.0.1
+
+
+这里的 DNS 服务器地址可以替换成您希望使用的 DNS 服务器地址。
+配置完成后，按 Esc 键退出编辑器，输入 :wq 保存并退出。
+重启网络服务，可以使用以下命令重启：
+systemctl restart network
+
+检查 IP 地址是否已经生效，可以使用以下命令检查：
+ip addr show eth0
+
+如果配置正确，则会显示指定的静态 IP 地址、子网掩码和网关。
+
+完成上述步骤后，您的 CentOS 7 服务器系统就会成功配置静态 IP，可以通过该地址访问网络。
